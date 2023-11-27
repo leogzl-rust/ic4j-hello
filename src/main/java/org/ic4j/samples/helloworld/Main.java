@@ -45,7 +45,8 @@ public class Main {
 			LOG.info(output);							
 
 		} catch (Throwable e) {
-			LOG.error(e.getLocalizedMessage(), e);
+			//LOG.error(e.getLocalizedMessage(), e);
+			e.printStackTrace();
 		}
 	}
 
