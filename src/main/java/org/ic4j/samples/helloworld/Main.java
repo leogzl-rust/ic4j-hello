@@ -28,6 +28,8 @@ public class Main {
 			String icLocation = env.getProperty("ic.location");
 			String icCanister = env.getProperty("ic.canister");
 			
+			System.out.println("  >>>> LOCATION: " + icLocation);
+			System.out.println("  >>>> CANISTER: " + icCanister);
 
 			ReplicaTransport transport = ReplicaApacheHttpTransport.create(icLocation);
 			Agent agent = new AgentBuilder().transport(transport).build();
