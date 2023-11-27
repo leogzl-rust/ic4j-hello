@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: ic4j-sample-helloworld
-Implementation-Version: 0.6.19
-Main-Class: org.ic4j.samples.helloworld.Main
-
