@@ -1,6 +1,7 @@
 package org.ic4j.samples.helloworld;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
@@ -27,25 +28,62 @@ public class Main {
 
 			String icLocation = env.getProperty("ic.location");
 			String icCanister = env.getProperty("ic.canister");
-			
+
 			System.out.println("  >>>> LOCATION: " + icLocation);
 			System.out.println("  >>>> CANISTER: " + icCanister);
 
 			ReplicaTransport transport = ReplicaApacheHttpTransport.create(icLocation);
 			Agent agent = new AgentBuilder().transport(transport).build();
-			
-			HelloWorldProxy helloWorldProxy = ProxyBuilder.create(agent, Principal.fromString(icCanister))
-					.getProxy(HelloWorldProxy.class);
+
+			IcpNemooProxy nemooProxy = ProxyBuilder.create(agent, Principal.fromString(icCanister)).getProxy(IcpNemooProxy.class);
 
 			String value = "world";
-			
-			CompletableFuture<String> proxyResponse = helloWorldProxy.greet(value);
-			
+
+			CompletableFuture<String> proxyResponse = nemooProxy.getCommand();
 			String output = proxyResponse.get();
-			LOG.info(output);							
+
+			System.out.println("EE");
+			CompletableFuture<Fish> proxyResponseFish = nemooProxy.getFish("100");
+			System.out.println("FF");
+
+			Fish x = proxyResponseFish.get();
+
+			System.out.println("OUT" + x.getFisher());
+			System.out.println("OUT" + x.getId());
+			System.out.println("OUT" + x.getWeight());
+			System.out.println("OUT" + x.getHeight());
+
+			x.setId(x.getId() + new Date().getTime());
+			System.out.println(x.getId());
+
+			CompletableFuture<String> proxySaveFish = nemooProxy.saveFish(x);
+
+			System.out.println("GG");
+			System.out.println(proxySaveFish.get());
+
+			System.out.println("EE");
+			CompletableFuture<Fisher> proxyResponseFisher = nemooProxy.getFisher("200");
+			System.out.println("FF");
+
+			Fisher fisher = proxyResponseFisher.get();
+
+			System.out.println("OUT" + fisher.getId());
+			System.out.println("OUT" + fisher.getName());
+			System.out.println("OUT" + fisher.getCity());
+			System.out.println("OUT" + fisher.getAge());
+
+			fisher.setId(fisher.getId() + new Date().getTime());
+			System.out.println(fisher.getId());
+
+			CompletableFuture<String> proxySaveFisher = nemooProxy.saveFisher(fisher);
+
+			System.out.println("GG");
+			System.out.println(proxySaveFisher.get());
+
+			LOG.info(output);
 
 		} catch (Throwable e) {
-			//LOG.error(e.getLocalizedMessage(), e);
+			// LOG.error(e.getLocalizedMessage(), e);
 			e.printStackTrace();
 		}
 	}
